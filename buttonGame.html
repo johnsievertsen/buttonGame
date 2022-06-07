@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Button Game</title>
+    <link rel="stylesheet" href="buttonGameStyle.css">
+</head>
+
+
+<button type="button" class="button">click</button>
+
+<body>
+    <button type="button" class="restartButton" onclick="restart()">CLICK TO RESET</button>
+    <div class="container">
+        <h1 class="header"><span style="color: red">B</span><span style="color: orange">U</span><span
+                style="color: yellow">T</span><span style="color: yellowgreen">T</span><span
+                style="color: green">O</span><span style="color: teal">N</span>
+            <span style="color: blue">G</span><span style="color: indigo">A</span><span
+                style="color: violet">M</span><span style="color: purple">E</span>
+        </h1>
+        <div>
+            <span class="score" id="scoreboard" style="color: white"></span>
+            <span class="highScore" id="highScoreboard"></span>
+        </div>
+    </div>
+</body>
+<audio class="hit" src="ding.wav"></audio>
+<audio class="miss" src="beep.wav"></audio>
+<script type="text/javascript">
+    const buttonElement = document.querySelector(".button");
+    const audioHit = document.querySelector('.hit');
+    const audioMiss = document.querySelector('.miss');
+    const restartButton = document.querySelector('.restartButton');
+    const highScore = localStorage.getItem('highscore');
+    if (!highScore) {
+        highScore = 0;
+    }
+    document.querySelector(".score").textContent = 'SCORE: 0 POINTS'
+    document.querySelector(".highScore").textContent = `. . . . . . . . .HIGH SCORE: ${highScore} POINTS. . . . . . . . .`
+    let score = 0;
+    let interval = 1750;
+
+
+    function moveButton() {
+        setTimeout(function () {
+            let positionTop = Math.floor(Math.random() * 665) + 110;
+            let positionRight = Math.floor(Math.random() * 1225) + 50;
+            buttonElement.style.top = positionTop + 'px';
+            buttonElement.style.right = positionRight + 'px';
+            moveButton();
+        }, interval);
+    }
+
+    moveButton();
+
+    function hitOrMiss(target) {
+        if (target === buttonElement) {
+            return true;
+        } else {
+            buttonElement.style.display = 'none';
+            restartButton.style.display = 'block';
+            document.querySelector(".score").textContent = `You Suck! FINAL SCORE: ${score} POINTS`;
+            if (score > highScore) {
+                localStorage.setItem('highscore', score);
+            }
+        }
+    }
+
+    function buttonClick(e) {
+        score++;
+        document.querySelector(".score").textContent = `SCORE: ${score} POINTS`;
+        hitOrMiss(e.target);
+        interval -= 100;
+        if (interval <= 250) {
+            interval = 250;
+        }
+    }
+
+    function buttonMiss(e) {
+        hitOrMiss(e.target);
+    }
+
+    function playSound(e) {
+        if (hitOrMiss(e.target)) {
+            audioHit.currentTime = 0;
+            audioHit.play();
+        } else {
+            audioMiss.currentTime = 0;
+            audioMiss.play();
+        }
+    }
+
+    function restart(e) {
+        location.reload();
+    }
+
+    window.addEventListener('click', playSound);
+    document.addEventListener("click", buttonMiss);
+    buttonElement.addEventListener("click", buttonClick);
+</script>
+
+</html>
