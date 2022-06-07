@@ -34,7 +34,7 @@
     const audioHit = document.querySelector('.hit');
     const audioMiss = document.querySelector('.miss');
     const restartButton = document.querySelector('.restartButton');
-    const highScore = localStorage.getItem('highscore');
+    let highScore = localStorage.getItem('highscore');
     if (!highScore) {
         highScore = 0;
     }
