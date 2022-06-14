@@ -10,12 +10,12 @@
 </head>
 
 
-<button type="button" class="button">click</button>
+<button id="button" type="button" class="button">click</button>
 
 <body>
     <button type="button" class="restartButton" onclick="restart()">CLICK TO RESET</button>
     <div class="container">
-        <h1 class="header"><span style="color: red">B</span><span style="color: orange">U</span><span
+        <h1 class="buttonGameText"><span style="color: red">B</span><span style="color: orange">U</span><span
                 style="color: yellow">T</span><span style="color: yellowgreen">T</span><span
                 style="color: green">O</span><span style="color: teal">N</span>
             <span style="color: blue">G</span><span style="color: indigo">A</span><span
@@ -44,7 +44,6 @@
     let score = 0;
     let interval = 1750;
 
-
     function moveButton() {
         setTimeout(function () {
             let positionTop = Math.floor(Math.random() * 665) + 110;
@@ -72,6 +71,7 @@
 
     function buttonClick(e) {
         score++;
+        document.activeElement.blur();
         document.querySelector(".score").textContent = `SCORE: ${score} POINTS`;
         hitOrMiss(e.target);
         interval -= 100;
